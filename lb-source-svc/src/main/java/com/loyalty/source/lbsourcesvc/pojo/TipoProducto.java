@@ -15,7 +15,7 @@ public class TipoProducto {
     @Column(name = "tipo_nombre")
     private  String tipo_nombre;
 
-    @OneToMany(mappedBy = "Tipoproducto")
+    @OneToMany(mappedBy = "tipoProducto")
     @JsonIgnore
     private List<Producto> productos;
 

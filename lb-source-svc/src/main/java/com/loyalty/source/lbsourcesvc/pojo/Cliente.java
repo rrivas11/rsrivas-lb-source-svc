@@ -31,6 +31,14 @@ public class Cliente {
     @JsonIgnore
     private List<Producto> producto;
 
+    @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
+    private List<Favorito> favClie ;
+
+    @OneToMany(mappedBy = "Beneficiario")
+    @JsonIgnore
+    private List<Favorito> favBen ;
+
 
     public int getIdcli() {
         return idcli;
@@ -79,4 +87,13 @@ public class Cliente {
     public void setPass(String pass) {
         this.pass = pass;
     }
+
+    public List<Producto> getProducto() {
+        return producto;
+    }
+
+    public void setProducto(List<Producto> producto) {
+        this.producto = producto;
+    }
 }
+

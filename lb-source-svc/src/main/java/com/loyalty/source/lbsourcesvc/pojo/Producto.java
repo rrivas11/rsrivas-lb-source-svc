@@ -1,17 +1,20 @@
 package com.loyalty.source.lbsourcesvc.pojo;
 
+import net.minidev.json.annotate.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "producto")
 public class Producto {
 
     @Id
-    @Column(name = "prd_idcuenta")
+    @Column(name = "prd_idproducto")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int idcuenta;
+    private int idproducto;
 
     @Column(name = "prd_idtipoproducto")
-    private int idtipoCuenta;
+    private int idtipoProducto;
 
     @Column(name = "prd_idpropietario")
     private int idpropietario;
@@ -33,21 +36,32 @@ public class Producto {
     @JoinColumn(name = "prd_idtipoproducto", referencedColumnName ="tipo_id", nullable = false, insertable = false, updatable = false )
     private TipoProducto tipoProducto;
 
+    @OneToMany(mappedBy = "productoBen")
+    @JsonIgnore
+    private List<Favorito> prodBen ;
 
-    public int getIdcuenta() {
-        return idcuenta;
+    @OneToMany(mappedBy = "origen")
+    @JsonIgnore
+    private List<Transaccion> transaccionsOrigen ;
+
+    @OneToMany(mappedBy = "destino")
+    @JsonIgnore
+    private List<Transaccion> transaccionsDestino ;
+
+    public int getIdproducto() {
+        return idproducto;
     }
 
-    public void setIdcuenta(int idcuenta) {
-        this.idcuenta = idcuenta;
+    public void setIdproducto(int idproducto) {
+        this.idproducto = idproducto;
     }
 
-    public int getIdtipoCuenta() {
-        return idtipoCuenta;
+    public int getIdtipoProducto() {
+        return idtipoProducto;
     }
 
-    public void setIdtipoCuenta(int idtipoCuenta) {
-        this.idtipoCuenta = idtipoCuenta;
+    public void setIdtipoProducto(int idtipoProducto) {
+        this.idtipoProducto = idtipoProducto;
     }
 
     public int getIdpropietario() {
