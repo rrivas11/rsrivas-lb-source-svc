@@ -1,6 +1,6 @@
-package com.loyalty.source.lbsourcesvc.configuration;
+package com.lifebank.source.lbsourcesvc.configuration;
 
-import com.loyalty.source.lbsourcesvc.utility.RestClient;
+import com.lifebank.source.lbsourcesvc.utility.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

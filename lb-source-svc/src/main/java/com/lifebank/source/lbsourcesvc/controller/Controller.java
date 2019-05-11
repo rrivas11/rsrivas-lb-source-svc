@@ -1,9 +1,9 @@
-package com.loyalty.source.lbsourcesvc.controller;
+package com.lifebank.source.lbsourcesvc.controller;
 
-import com.loyalty.source.lbsourcesvc.process.ProductProcess;
-import com.loyalty.source.lbsourcesvc.utility.JsonConvert;
-import com.loyalty.source.lbsourcesvc.utility.MDCHandler;
-import com.loyalty.source.lbsourcesvc.utility.RestClient;
+import com.lifebank.source.lbsourcesvc.process.ProductProcess;
+import com.lifebank.source.lbsourcesvc.utility.JsonConvert;
+import com.lifebank.source.lbsourcesvc.utility.MDCHandler;
+import com.lifebank.source.lbsourcesvc.utility.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
