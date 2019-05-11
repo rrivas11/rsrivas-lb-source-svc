@@ -4,3 +4,5 @@ lb-source-svc/\.idea/
 *.class
 
 *.lst
+
+lb-source-svc/file-log/active_profile_IS_UNDEFINED/qms-integrator-svc/log\.txt

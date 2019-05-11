@@ -1,4 +1,4 @@
-package com.lifebank.source.lbsourcesvc.pojo;
+package com.lifebank.source.lbsourcesvc.pojo.database;
 
 import net.minidev.json.annotate.JsonIgnore;
 

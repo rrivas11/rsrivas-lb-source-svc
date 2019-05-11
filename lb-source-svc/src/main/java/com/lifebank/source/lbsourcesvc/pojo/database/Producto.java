@@ -1,4 +1,4 @@
-package com.lifebank.source.lbsourcesvc.pojo;
+package com.lifebank.source.lbsourcesvc.pojo.database;
 
 import net.minidev.json.annotate.JsonIgnore;
 
@@ -30,6 +30,12 @@ public class Producto {
 
     @Column(name = "prd_tasa")
     private Double tasa;
+
+    @Column(name = "prd_corte")
+    private int corte;
+
+    @Column(name = "prd_interes_acumulado")
+    private Double interesAcumulado;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prd_idpropietario", referencedColumnName ="cl_idcliente", nullable = false, insertable = false, updatable = false )
@@ -145,5 +151,21 @@ public class Producto {
 
     public void setTasa(Double tasa) {
         this.tasa = tasa;
+    }
+
+    public int getCorte() {
+        return corte;
+    }
+
+    public void setCorte(int corte) {
+        this.corte = corte;
+    }
+
+    public Double getInteresAcumulado() {
+        return interesAcumulado;
+    }
+
+    public void setInteresAcumulado(Double interesAcumulado) {
+        this.interesAcumulado = interesAcumulado;
     }
 }

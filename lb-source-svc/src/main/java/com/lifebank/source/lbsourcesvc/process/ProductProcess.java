@@ -1,9 +1,13 @@
 package com.lifebank.source.lbsourcesvc.process;
 
-import com.lifebank.source.lbsourcesvc.pojo.Cliente;
-import com.lifebank.source.lbsourcesvc.pojo.Favorito;
-import com.lifebank.source.lbsourcesvc.pojo.Producto;
-import com.lifebank.source.lbsourcesvc.pojo.Transaccion;
+import com.lifebank.source.lbsourcesvc.parse.ProductParser;
+import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
+import com.lifebank.source.lbsourcesvc.pojo.common.Status;
+import com.lifebank.source.lbsourcesvc.pojo.database.Cliente;
+import com.lifebank.source.lbsourcesvc.pojo.database.Favorito;
+import com.lifebank.source.lbsourcesvc.pojo.database.Producto;
+import com.lifebank.source.lbsourcesvc.pojo.database.Transaccion;
+import com.lifebank.source.lbsourcesvc.pojo.products.GetProductResponse;
 import com.lifebank.source.lbsourcesvc.repository.IClienteRepository;
 import com.lifebank.source.lbsourcesvc.repository.IFavoritoRepository;
 import com.lifebank.source.lbsourcesvc.repository.IProductoRepository;
@@ -18,58 +22,38 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ProductProcess {
-    @Autowired
-    private Environment env;
-    @Autowired
-    private RestClient restClient;
-    @Autowired
-    private IProductoRepository productoRepository;
-    @Autowired
-    private IFavoritoRepository favoritoRepository;
-    @Autowired
-    private IClienteRepository clienteRepository;
-    @Autowired
-    private ITransaccionRepository transaccionRepository;
-
+public class ProductProcess extends SourceProcess {
     private Logger log;
 
 
-    public Object process(int idCliente){
+    public ServiceMessage process(String user){
+        Status status = new Status();
+        ServiceMessage serviceMessage;
+        ProductParser parser = new ProductParser(env);
+        GetProductResponse response = new GetProductResponse();
 
-        Favorito fav = new Favorito();
+        try{
+            Cliente c = clienteRepository.findByusuario(user);
+            List<Producto> listPrd = productoRepository.findByidpropietario(c.getIdcli());
+            if(listPrd.size()>0){
+                response = parser.parser(listPrd);
+                status.setCode(env.getProperty("appProperties.code.c200"));
+                serviceMessage = new ServiceMessage(status, response);
+            }else{
+                status.setCode(env.getProperty("appProperties.code.c400"));
+                status.setMessage(env.getProperty("appProperties.messages.mjs4"));
+                serviceMessage = new ServiceMessage(status, null);
+            }
 
+            return serviceMessage;
+        }catch (Exception e){
+            log.error("ProductProcess - Hubo un error en consulta a la base , en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            status.setCode(env.getProperty("appProperties.code.c400"));
+            status.setMessage(env.getProperty("appProperties.messages.mjs4"));
+            serviceMessage = new ServiceMessage(status, null);
+            return  serviceMessage;
+        }
 
-        fav.setIdcliente(1);
-        fav.setIdbene(2);
-        fav.setIdprod("0777773");
-        fav.setFecha(LocalDateTime.now());
-        fav.setCorreo("eperez@hotmail.com");
-
-        favoritoRepository.save(fav);
-
-
-        Transaccion tra = new Transaccion();
-
-        tra.setId_origen("0888882");
-        tra.setId_destino("0888883");
-        tra.setMonto(145.34);
-        tra.setFecha(LocalDateTime.now());
-        tra.setDescripcion("Abono");
-
-        transaccionRepository.save(tra);
-
-
-        Cliente c =  clienteRepository.findByusuarioAndPass("rrivas","123");
-        Producto prd = productoRepository.findByidproducto("0888882");
-        List<Producto> listPrd = productoRepository.findByidpropietario(idCliente);
-        Favorito favorito = favoritoRepository.findByidclienteAndIdbene(1,2);
-        int i = favoritoRepository.updateEmail("correo@yahoo.com",1,2);
-        favoritoRepository.delete(favorito);
-
-
-
-        return listPrd.get(0);
     }
 
 

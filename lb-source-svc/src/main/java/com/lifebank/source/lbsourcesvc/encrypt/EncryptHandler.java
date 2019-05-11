@@ -1,0 +1,73 @@
+package com.lifebank.source.lbsourcesvc.encrypt;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
+public class EncryptHandler {
+    //algoritmos
+    public static String MD2 = "MD2";
+    public static String MD5 = "MD5";
+    public static String SHA1 = "SHA-1";
+    public static String SHA256 = "SHA-256";
+    public static String SHA384 = "SHA-384";
+    public static String SHA512 = "SHA-512";
+
+    /**
+     * *
+     * Convierte un arreglo de bytes a String usando valores hexadecimales
+     *
+     * @param digest arreglo de bytes a convertir
+     * @return String creado a partir de <code>digest</code>
+     */
+    private static String toHexadecimal(byte[] digest) {
+        String hash = "";
+        for (byte aux : digest) {
+            int b = aux & 0xff;
+            if (Integer.toHexString(b).length() == 1) {
+                hash += "0";
+            }
+            hash += Integer.toHexString(b);
+        }
+        return hash;
+    }
+
+    /**
+     * *
+     * Encripta un mensaje de texto mediante algoritmo de resumen de mensaje.
+     *
+     * @param message texto a encriptar
+     * @param algorithm algoritmo de encriptacion, puede ser: MD2, MD5, SHA-1, SHA-256, SHA-384, SHA-512
+     * @return mensaje encriptado
+     */
+    public static String getStringMessageDigest(String message, String algorithm) {
+        byte[] digest = null;
+        byte[] buffer = message.getBytes();
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+            messageDigest.reset();
+            messageDigest.update(buffer);
+            digest = messageDigest.digest();
+
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("No se encontró el algoritmo de cifrado", ex);
+        }
+        return toHexadecimal(digest);
+    }
+
+    public static String cifrarBase64(String a){
+        Base64.Encoder encoder = Base64.getEncoder();
+        String b = encoder.encodeToString(a.getBytes(StandardCharsets.UTF_8) );
+        return b;
+    }
+
+    public static String descifrarBase64(String a){
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] decodedByteArray = decoder.decode(a);
+
+        String b = new String(decodedByteArray);
+        return b;
+    }
+
+}

@@ -16,3 +16,16 @@ spring:
           lob:
             non_contextual_creation: true
         default_schema: lm_lifebank
+appProperties:
+  code:
+    c200: "200"
+    c401: "401"
+    c400: "400"
+  messages:
+    mjs1: "Se produjo un error"
+    mjs2: "Usuario y/o contraseña invalida"
+    mjs3: "Token invalido"
+    mjs4: "No se encontraron productos"
+  creditCard: "1"
+  loan: "2"
+  personal: "3"

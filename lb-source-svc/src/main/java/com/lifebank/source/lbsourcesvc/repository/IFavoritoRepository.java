@@ -1,6 +1,6 @@
 package com.lifebank.source.lbsourcesvc.repository;
 
-import com.lifebank.source.lbsourcesvc.pojo.Favorito;
+import com.lifebank.source.lbsourcesvc.pojo.database.Favorito;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
