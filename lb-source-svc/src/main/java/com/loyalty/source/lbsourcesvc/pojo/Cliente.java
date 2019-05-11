@@ -95,5 +95,21 @@ public class Cliente {
     public void setProducto(List<Producto> producto) {
         this.producto = producto;
     }
+
+    public List<Favorito> getFavClie() {
+        return favClie;
+    }
+
+    public void setFavClie(List<Favorito> favClie) {
+        this.favClie = favClie;
+    }
+
+    public List<Favorito> getFavBen() {
+        return favBen;
+    }
+
+    public void setFavBen(List<Favorito> favBen) {
+        this.favBen = favBen;
+    }
 }
 

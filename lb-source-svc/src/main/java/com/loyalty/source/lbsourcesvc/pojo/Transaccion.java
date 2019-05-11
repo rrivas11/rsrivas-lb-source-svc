@@ -11,11 +11,11 @@ public class Transaccion {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int tra_id;
     @Column(name = "tra_id_origen")
-    private  int id_origen;
+    private  String id_origen;
     @Column(name = "tra_id_destino")
-    private  int id_destino;
-    @Column(name = "tra_id_tipo")
-    private  int id_tipo;
+    private  String id_destino;
+    @Column(name = "tra_descripcion")
+    private  String descripcion;
     @Column(name = "tra_monto")
     private  int monto;
     @Column(name = "tra_fecha")
@@ -29,9 +29,6 @@ public class Transaccion {
     @JoinColumn(name = "tra_id_destino", referencedColumnName ="prd_idproducto", nullable = false, insertable = false, updatable = false )
     private Producto destino;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tra_id_tipo", referencedColumnName ="tip_id", nullable = false, insertable = false, updatable = false )
-    private TipoTransaccion tipoTransaccion;
 
     public int getTra_id() {
         return tra_id;
@@ -41,28 +38,28 @@ public class Transaccion {
         this.tra_id = tra_id;
     }
 
-    public int getId_origen() {
+    public String getId_origen() {
         return id_origen;
     }
 
-    public void setId_origen(int id_origen) {
+    public void setId_origen(String id_origen) {
         this.id_origen = id_origen;
     }
 
-    public int getId_destino() {
+    public String getId_destino() {
         return id_destino;
     }
 
-    public void setId_destino(int id_destino) {
+    public void setId_destino(String id_destino) {
         this.id_destino = id_destino;
     }
 
-    public int getId_tipo() {
-        return id_tipo;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setId_tipo(int id_tipo) {
-        this.id_tipo = id_tipo;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public int getMonto() {
@@ -80,4 +77,21 @@ public class Transaccion {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
+    public Producto getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(Producto origen) {
+        this.origen = origen;
+    }
+
+    public Producto getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Producto destino) {
+        this.destino = destino;
+    }
+
 }

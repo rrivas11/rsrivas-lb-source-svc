@@ -16,9 +16,11 @@ public class Favorito {
     @Column(name = "fav_idbeneficiario")
     private int idbene;
     @Column(name = "fav_idproducto")
-    private int idprod;
+    private String idprod;
     @Column(name = "fav_fecha")
     private LocalDateTime fecha;
+    @Column(name = "fav_correo")
+    private String correo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fav_idcliente", referencedColumnName ="cl_idcliente", nullable = false, insertable = false, updatable = false )
@@ -57,11 +59,11 @@ public class Favorito {
         this.idbene = idbene;
     }
 
-    public int getIdprod() {
+    public String getIdprod() {
         return idprod;
     }
 
-    public void setIdprod(int idprod) {
+    public void setIdprod(String idprod) {
         this.idprod = idprod;
     }
 
@@ -71,5 +73,37 @@ public class Favorito {
 
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Cliente getBeneficiario() {
+        return Beneficiario;
+    }
+
+    public void setBeneficiario(Cliente beneficiario) {
+        Beneficiario = beneficiario;
+    }
+
+    public Producto getProductoBen() {
+        return productoBen;
+    }
+
+    public void setProductoBen(Producto productoBen) {
+        this.productoBen = productoBen;
     }
 }

@@ -11,7 +11,7 @@ public class Producto {
     @Id
     @Column(name = "prd_idproducto")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int idproducto;
+    private String idproducto;
 
     @Column(name = "prd_idtipoproducto")
     private int idtipoProducto;
@@ -27,6 +27,9 @@ public class Producto {
 
     @Column(name = "prd_monto")
     private Double monto;
+
+    @Column(name = "prd_tasa")
+    private Double tasa;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prd_idpropietario", referencedColumnName ="cl_idcliente", nullable = false, insertable = false, updatable = false )
@@ -48,11 +51,11 @@ public class Producto {
     @JsonIgnore
     private List<Transaccion> transaccionsDestino ;
 
-    public int getIdproducto() {
+    public String getIdproducto() {
         return idproducto;
     }
 
-    public void setIdproducto(int idproducto) {
+    public void setIdproducto(String idproducto) {
         this.idproducto = idproducto;
     }
 
@@ -94,5 +97,53 @@ public class Producto {
 
     public void setMonto(Double monto) {
         this.monto = monto;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public TipoProducto getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(TipoProducto tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
+    public List<Favorito> getProdBen() {
+        return prodBen;
+    }
+
+    public void setProdBen(List<Favorito> prodBen) {
+        this.prodBen = prodBen;
+    }
+
+    public List<Transaccion> getTransaccionsOrigen() {
+        return transaccionsOrigen;
+    }
+
+    public void setTransaccionsOrigen(List<Transaccion> transaccionsOrigen) {
+        this.transaccionsOrigen = transaccionsOrigen;
+    }
+
+    public List<Transaccion> getTransaccionsDestino() {
+        return transaccionsDestino;
+    }
+
+    public void setTransaccionsDestino(List<Transaccion> transaccionsDestino) {
+        this.transaccionsDestino = transaccionsDestino;
+    }
+
+    public Double getTasa() {
+        return tasa;
+    }
+
+    public void setTasa(Double tasa) {
+        this.tasa = tasa;
     }
 }

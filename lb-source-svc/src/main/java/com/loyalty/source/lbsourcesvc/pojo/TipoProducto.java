@@ -42,4 +42,6 @@ public class TipoProducto {
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
     }
+
+
 }

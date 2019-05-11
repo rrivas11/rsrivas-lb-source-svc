@@ -1,0 +1,6 @@
+
+lb-source-svc/\.idea/
+
+*.class
+
+*.lst
