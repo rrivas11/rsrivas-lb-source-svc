@@ -3,9 +3,8 @@ package com.lifebank.source.lbsourcesvc.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
 import com.lifebank.source.lbsourcesvc.pojo.login.LoginRequest;
+import com.lifebank.source.lbsourcesvc.pojo.transaction.SetTransactionRequest;
 import com.lifebank.source.lbsourcesvc.process.*;
-import com.lifebank.source.lbsourcesvc.utility.JsonConvert;
-import com.lifebank.source.lbsourcesvc.utility.MDCHandler;
 import com.lifebank.source.lbsourcesvc.utility.RestClient;
 import org.jboss.logging.MDC;
 import org.slf4j.Logger;
@@ -32,7 +31,9 @@ public class Controller {
     @Autowired
     private LoginProcess loginProcess;
     @Autowired
-    private TransactionProcess tranctionProcess;
+    private TransactionHistoryProcess tranctionHistoryProcess;
+    @Autowired
+    private TransactionProcess transactionProcess;
     @Autowired
     private GenerateErrorResponse generateErrorResponse;
 
@@ -58,7 +59,7 @@ public class Controller {
             log.info("Login response:" + mapper.writeValueAsString(serviceMessage));
             return serviceMessage;
         }catch (Exception e){
-            log.error("Hubo un error  login, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
+            log.error("Hubo un error es login, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
             return generateErrorResponse.getGeneralError();
         }
 
@@ -71,38 +72,56 @@ public class Controller {
             date = new Date();
             MDC.put("function", "getProducts");
             MDC.put("date", dateFormat.format(date));
-            log.info("request recibido: user:"+ user );
+            log.info("getProducts request recibido: user:"+ user );
             ServiceMessage serviceMessage = productProcess.process(user);
-            log.info("Login response:" + mapper.writeValueAsString(serviceMessage));
+            log.info("getProducts response:" + mapper.writeValueAsString(serviceMessage));
             return serviceMessage;
         }catch (Exception e){
-            log.error("Hubo un error  getProducts, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
+            log.error("Hubo un error en getProducts, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
             return generateErrorResponse.getGeneralError();
         }
 
     }
 
     //Endpoint para obtener los productos de un cliente
-    @GetMapping("${app-properties.controller.transactions}")
-    public Object getTransactions(@PathVariable("accountID") String idProd,
-                                  @RequestParam(value="start", required = true) String start,
-                                  @RequestParam(value="end", required = true) String end,
-                                  @RequestHeader("token") String user) {
-        try {
-            date = new Date();
-            MDC.put("function", "getProducts");
-            MDC.put("date", dateFormat.format(date));
-            log.info("request recibido: accountID: "+ idProd +", start: "+ start +", end: "+ end);
-            ServiceMessage serviceMessage = tranctionProcess.process(idProd,start,end);
-            log.info("Login response:" + mapper.writeValueAsString(serviceMessage));
-            return serviceMessage;
-        }catch (Exception e){
-            log.error("Hubo un error  getProducts, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
-            return generateErrorResponse.getGeneralError();
-        }
+        @GetMapping("${app-properties.controller.transactions}")
+        public Object getTransactions(@PathVariable("accountID") String idProd,
+                @RequestParam(value="start", required = true) String start,
+                @RequestParam(value="end", required = true) String end,
+                @RequestHeader("token") String user) {
+            try {
+                date = new Date();
+                MDC.put("function", "getTransactions");
+                MDC.put("date", dateFormat.format(date));
+                log.info("getTransactions request recibido: accountID: "+ idProd +", start: "+ start +", end: "+ end);
+                ServiceMessage serviceMessage = tranctionHistoryProcess.process(idProd,start,end);
+                log.info("getTransactions response:" + mapper.writeValueAsString(serviceMessage));
+                return serviceMessage;
+            }catch (Exception e){
+                log.error("Hubo un error en getTransactions, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
+                return generateErrorResponse.getGeneralError();
+            }
 
     }
 
+
+
+    //Endpoint para obtener los productos de un cliente
+    @PostMapping("${app-properties.controller.transaction-p}")
+    public Object setTransactionP(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
+        try {
+            date = new Date();
+            MDC.put("function", "setTransactionP");
+            MDC.put("date", dateFormat.format(date));
+            log.info("setTransactionP request recibido" + mapper.writeValueAsString(request));
+            ServiceMessage serviceMessage = transactionProcess.processP(request, id_cliente);
+            log.info("Login response:" + mapper.writeValueAsString(serviceMessage));
+            return serviceMessage;
+        } catch (Exception e) {
+            log.error("Hubo un error en getTransactions, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            return generateErrorResponse.getGeneralError();
+        }
+    }
 
 
 
