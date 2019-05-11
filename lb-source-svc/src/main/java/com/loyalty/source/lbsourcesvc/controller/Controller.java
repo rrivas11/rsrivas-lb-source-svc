@@ -1,7 +1,6 @@
 package com.loyalty.source.lbsourcesvc.controller;
 
 import com.loyalty.source.lbsourcesvc.process.ProductProcess;
-import com.loyalty.source.lbsourcesvc.repository.IProductoRepository;
 import com.loyalty.source.lbsourcesvc.utility.JsonConvert;
 import com.loyalty.source.lbsourcesvc.utility.MDCHandler;
 import com.loyalty.source.lbsourcesvc.utility.RestClient;
@@ -24,6 +23,7 @@ public class Controller {
     @Autowired
     private ProductProcess productProcess;
 
+
     private Logger log;
 
     public Controller() {
@@ -31,13 +31,14 @@ public class Controller {
     }
 
 
-    @PostMapping("${app-properties.controller.products}")
+    @GetMapping("${app-properties.controller.products}")
     public Object products(@PathVariable("idclient") String idclient) {
         JsonConvert jsonConvert = new JsonConvert();
         try {
-            return productProcess.process("1");
+            return productProcess.process(1);
         }
         catch(Exception e) {
+            e.printStackTrace();
             return null;
         }finally {
             MDCHandler.removeContextVariables();

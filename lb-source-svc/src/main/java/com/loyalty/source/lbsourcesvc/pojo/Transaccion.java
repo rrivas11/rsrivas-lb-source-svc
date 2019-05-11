@@ -17,7 +17,7 @@ public class Transaccion {
     @Column(name = "tra_descripcion")
     private  String descripcion;
     @Column(name = "tra_monto")
-    private  int monto;
+    private  Double monto;
     @Column(name = "tra_fecha")
     private LocalDateTime fecha;
 
@@ -62,11 +62,11 @@ public class Transaccion {
         this.descripcion = descripcion;
     }
 
-    public int getMonto() {
+    public Double getMonto() {
         return monto;
     }
 
-    public void setMonto(int monto) {
+    public void setMonto(Double monto) {
         this.monto = monto;
     }
 
