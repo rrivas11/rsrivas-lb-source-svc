@@ -1,2 +1,2 @@
-# rsrivas-lb-source-svc
-examen de reclutamiento.
+# rsrivas-LifeBank
+Examen práctico para Desarrollador de Software
