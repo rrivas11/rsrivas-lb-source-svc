@@ -21,6 +21,7 @@ appProperties:
     c200: "200"
     c401: "401"
     c400: "400"
+    c404: "404"
   messages:
     mjs1: "Se produjo un error"
     mjs2: "Usuario y/o contraseña invalida"

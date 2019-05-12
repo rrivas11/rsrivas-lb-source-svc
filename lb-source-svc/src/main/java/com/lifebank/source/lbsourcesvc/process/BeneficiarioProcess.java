@@ -17,14 +17,14 @@ public class BeneficiarioProcess extends SourceProcess {
     private Logger log;
 
 
-    public  ResponseEntity<Object> process(UpdateMailRequest request, int id_cliente,String beneficiaryID) {
+    public  ResponseEntity<Object> updateProcess(UpdateMailRequest request, int id_cliente, String beneficiaryID) {
         Status status = new Status();
         ServiceMessage serviceMessage;
         Favorito favorito;
 
         favorito = favoritoRepository.findByidclienteAndIdbene(id_cliente,Integer.valueOf(beneficiaryID));
         if(favorito == null) {
-            status.setCode(env.getProperty("appProperties.code.c400"));
+            status.setCode(env.getProperty("appProperties.code.c404"));
             status.setMessage(env.getProperty("appProperties.messages.mjs10"));
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
@@ -33,7 +33,7 @@ public class BeneficiarioProcess extends SourceProcess {
         int i = favoritoRepository.updateEmail(request.getNuevoCorreo(),id_cliente,Integer.valueOf(beneficiaryID));
 
         if(i <= 0 ){
-            status.setCode(env.getProperty("appProperties.code.c400"));
+            status.setCode(env.getProperty("appProperties.code.c404"));
             status.setMessage(env.getProperty("appProperties.messages.mjs1"));
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
@@ -41,4 +41,31 @@ public class BeneficiarioProcess extends SourceProcess {
         return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 
     }
+
+    public  ResponseEntity<Object> deleteProcess( int id_cliente, String beneficiaryID) {
+        Status status = new Status();
+        ServiceMessage serviceMessage;
+        Favorito favorito;
+
+        favorito = favoritoRepository.findByidclienteAndIdbene(id_cliente,Integer.valueOf(beneficiaryID));
+        if(favorito == null) {
+            status.setCode(env.getProperty("appProperties.code.c404"));
+            status.setMessage(env.getProperty("appProperties.messages.mjs10"));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
+            //return serviceMessage;
+        }
+
+        try {
+            favoritoRepository.delete(favorito);
+            return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+
+        }catch (Exception e){
+            status.setCode(env.getProperty("appProperties.code.c404"));
+            status.setMessage(env.getProperty("appProperties.messages.mjs1"));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

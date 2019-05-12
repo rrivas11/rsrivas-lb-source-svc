@@ -145,17 +145,31 @@ public class Controller {
         }
     }
 
-    //Endpoint para
+    //Endpoint para actualizar el E-mail de un beneficiario agregado en lista de favoritos.
     @PatchMapping("${app-properties.controller.update-mail}")
     public ResponseEntity<Object> updateMail(@PathVariable("beneficiaryID") String beneficiaryID, @RequestBody UpdateMailRequest request , @RequestHeader("token") int id_cliente) {
         try {
             date = new Date();
-            MDC.put("function", "setTransactionT");
+            MDC.put("function", "updateMail");
             MDC.put("date", dateFormat.format(date));
             log.info("updateMail request recibido" + mapper.writeValueAsString(request));
-            return beneficiarioProcess.process(request, id_cliente,beneficiaryID);
+            return beneficiarioProcess.updateProcess(request, id_cliente,beneficiaryID);
         } catch (Exception e) {
-            log.error("Hubo un error en setTransactionT, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            log.error("Hubo un error en updateMail, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    //Endpoint para eliminar beneficiario.
+    @DeleteMapping("${app-properties.controller.delete-beneficiary}")
+    public ResponseEntity<Object> deleteBeneficiary(@PathVariable("beneficiaryID") String beneficiaryID, @RequestHeader("token") int id_cliente) {
+        try {
+            date = new Date();
+            MDC.put("function", "deleteBeneficiary");
+            MDC.put("date", dateFormat.format(date));
+            log.info("deleteBeneficiary beneficiaryID: " + beneficiaryID);
+            return beneficiarioProcess.deleteProcess(id_cliente,beneficiaryID);
+        } catch (Exception e) {
+            log.error("Hubo un error en deleteBeneficiary, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
             return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
         }
     }
