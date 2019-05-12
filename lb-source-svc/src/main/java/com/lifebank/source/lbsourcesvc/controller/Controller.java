@@ -109,7 +109,7 @@ public class Controller {
 
     }
 
-    
+
     //Endpoint para realizar una transaccion a productos propios del cliente
     @PostMapping("${app-properties.controller.transaction-p}")
     public Object setTransactionP(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
