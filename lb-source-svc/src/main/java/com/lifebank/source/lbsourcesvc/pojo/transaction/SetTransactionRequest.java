@@ -20,6 +20,8 @@ public class SetTransactionRequest {
     private String origen;
     @JsonProperty("destino")
     private String destino;
+    @JsonProperty("beneficiario")
+    private String idBeneficiario;
     @JsonProperty("monto")
     private Double monto;
 
@@ -85,4 +87,11 @@ public class SetTransactionRequest {
         this.monto = monto;
     }
 
+    public String getIdBeneficiario() {
+        return idBeneficiario;
+    }
+
+    public void setIdBeneficiario(String idBeneficiario) {
+        this.idBeneficiario = idBeneficiario;
+    }
 }

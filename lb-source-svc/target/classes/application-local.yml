@@ -31,6 +31,7 @@ appProperties:
     mjs7: "Una de las cuentas no pertenece al cliente"
     mjs8: "Tipo de cuenta invalida"
     mjs9: "Saldo insuficiente"
+    mjs10: "Contacto no asoaciado."
   creditCard: "1"
   loan: "2"
   personal: "3"

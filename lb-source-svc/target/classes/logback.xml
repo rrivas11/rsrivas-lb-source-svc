@@ -15,7 +15,7 @@
     </encoder>
   </appender>
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>file-log/${active_profile}/qms-integrator-svc/log.txt</file>
+        <file>file-log/${active_profile}/lb-source-svc/log.txt</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
             <fileNamePattern>file-log/${active_profile}/lb-source-svc/log%d{yyyyMMdd}.log</fileNamePattern>

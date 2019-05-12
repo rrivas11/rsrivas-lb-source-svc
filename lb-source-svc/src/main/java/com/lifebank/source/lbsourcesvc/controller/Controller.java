@@ -106,7 +106,7 @@ public class Controller {
 
 
 
-    //Endpoint para obtener los productos de un cliente
+    //Endpoint para realizar una transaccion a productos propios del cliente
     @PostMapping("${app-properties.controller.transaction-p}")
     public Object setTransactionP(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
         try {
@@ -115,10 +115,28 @@ public class Controller {
             MDC.put("date", dateFormat.format(date));
             log.info("setTransactionP request recibido" + mapper.writeValueAsString(request));
             ServiceMessage serviceMessage = transactionProcess.processP(request, id_cliente);
-            log.info("Login response:" + mapper.writeValueAsString(serviceMessage));
+            log.info("setTransactionP response:" + mapper.writeValueAsString(serviceMessage));
             return serviceMessage;
         } catch (Exception e) {
-            log.error("Hubo un error en getTransactions, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            log.error("Hubo un error en setTransactionP, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            return generateErrorResponse.getGeneralError();
+        }
+    }
+
+
+    //Endpoint para realizar una transaccion a productos de terceros
+    @PostMapping("${app-properties.controller.transaction-t}")
+    public Object setTransactionT(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
+        try {
+            date = new Date();
+            MDC.put("function", "setTransactionT");
+            MDC.put("date", dateFormat.format(date));
+            log.info("setTransactionT request recibido" + mapper.writeValueAsString(request));
+            ServiceMessage serviceMessage = transactionProcess.processT(request, id_cliente);
+            log.info("setTransactionT response:" + mapper.writeValueAsString(serviceMessage));
+            return serviceMessage;
+        } catch (Exception e) {
+            log.error("Hubo un error en setTransactionT, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
             return generateErrorResponse.getGeneralError();
         }
     }
