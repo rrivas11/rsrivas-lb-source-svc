@@ -39,7 +39,6 @@ public class LoginProcess extends SourceProcess {
         return serviceMessage;
     }
 
-
     public  ServiceMessage authorizationProcess(String Token){
         Status status = new Status();
         ServiceMessage serviceMessage;

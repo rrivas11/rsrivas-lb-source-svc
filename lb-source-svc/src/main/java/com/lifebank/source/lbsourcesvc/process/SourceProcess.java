@@ -1,5 +1,6 @@
 package com.lifebank.source.lbsourcesvc.process;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lifebank.source.lbsourcesvc.repository.IClienteRepository;
 import com.lifebank.source.lbsourcesvc.repository.IFavoritoRepository;
 import com.lifebank.source.lbsourcesvc.repository.IProductoRepository;
@@ -23,4 +24,6 @@ public class SourceProcess {
     protected IClienteRepository clienteRepository;
     @Autowired
     protected ITransaccionRepository transaccionRepository;
+    protected ObjectMapper mapper = new ObjectMapper();
+
 }

@@ -1,6 +1,7 @@
 package com.lifebank.source.lbsourcesvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lifebank.source.lbsourcesvc.pojo.cliente.UpdateMailRequest;
 import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
 import com.lifebank.source.lbsourcesvc.pojo.login.LoginRequest;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.SetTransactionRequest;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -34,6 +37,8 @@ public class Controller {
     private TransactionHistoryProcess tranctionHistoryProcess;
     @Autowired
     private TransactionProcess transactionProcess;
+    @Autowired
+    private BeneficiarioProcess beneficiarioProcess;
     @Autowired
     private GenerateErrorResponse generateErrorResponse;
 
@@ -123,7 +128,6 @@ public class Controller {
         }
     }
 
-
     //Endpoint para realizar una transaccion a productos de terceros
     @PostMapping("${app-properties.controller.transaction-t}")
     public Object setTransactionT(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
@@ -141,6 +145,20 @@ public class Controller {
         }
     }
 
+    //Endpoint para
+    @PatchMapping("${app-properties.controller.update-mail}")
+    public ResponseEntity<Object> updateMail(@PathVariable("beneficiaryID") String beneficiaryID, @RequestBody UpdateMailRequest request , @RequestHeader("token") int id_cliente) {
+        try {
+            date = new Date();
+            MDC.put("function", "setTransactionT");
+            MDC.put("date", dateFormat.format(date));
+            log.info("updateMail request recibido" + mapper.writeValueAsString(request));
+            return beneficiarioProcess.process(request, id_cliente,beneficiaryID);
+        } catch (Exception e) {
+            log.error("Hubo un error en setTransactionT, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 }
