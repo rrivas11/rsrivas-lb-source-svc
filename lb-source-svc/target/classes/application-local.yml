@@ -25,7 +25,7 @@ appProperties:
     c409: "409"
   messages:
     mjs1: "Se produjo un error"
-    mjs2: "Usuario y/o contraseña invalida"
+    mjs2: "Usuario y/o contraseña invalido"
     mjs3: "Token invalido"
     mjs4: "No se encontraron productos"
     mjs5: "Una de las cuentas no fue encontrada"
@@ -38,3 +38,6 @@ appProperties:
   creditCard: "1"
   loan: "2"
   personal: "3"
+  jwt:
+    secret: helloWorld
+    expiration-time: 60000

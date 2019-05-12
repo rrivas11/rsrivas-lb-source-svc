@@ -55,18 +55,17 @@ public class Controller {
 
     //Endpoint que valida usuario y contraseña.
     @PostMapping("${app-properties.controller.login}")
-    public Object login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             date = new Date();
             MDC.put("function", "login");
             MDC.put("date", dateFormat.format(date));
-            //log.info("request recibido: "+ mapper.writeValueAsString(loginRequest)); //OJO Quitar contraseña de los logs
-            ServiceMessage serviceMessage = loginProcess.authenticationProcess(loginRequest.getUser(),loginRequest.getPass());
-            log.info("Login response:" + mapper.writeValueAsString(serviceMessage));
-            return serviceMessage;
+            log.info("request recibido: "+ mapper.writeValueAsString(loginRequest)); //OJO Quitar contraseña de los logs
+
+            return loginProcess.authenticationProcess(loginRequest.getUser(),loginRequest.getPass());
         }catch (Exception e){
             log.error("Hubo un error es login, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
-            return generateErrorResponse.getGeneralError();
+            return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -143,6 +142,9 @@ public class Controller {
             return generateErrorResponse.getGeneralError();
         }
     }
+
+
+
 
     //Endpoint para actualizar el E-mail de un beneficiario agregado en lista de favoritos.
     @PatchMapping("${app-properties.controller.update-mail}")

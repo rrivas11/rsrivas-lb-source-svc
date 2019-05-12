@@ -12,6 +12,8 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
+
 
 public class JwtHandler {
     private Map<String, Object> mapIn = new HashMap<>();
@@ -95,6 +97,23 @@ public class JwtHandler {
 
 
         return id_cliente;
+    }
+
+
+    public HttpStatus obtainHttpCode(int i){
+
+        switch (i){
+            case 0:
+                return HttpStatus.FORBIDDEN; // 403
+            case -1:
+                return  HttpStatus.valueOf(440);
+            case -2:
+                return  HttpStatus.FORBIDDEN; // 403
+            default:
+                return  HttpStatus.NOT_FOUND;
+        }
+
+
     }
 
 }
