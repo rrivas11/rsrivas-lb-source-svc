@@ -9,6 +9,7 @@ import com.lifebank.source.lbsourcesvc.pojo.database.Cliente;
 import com.lifebank.source.lbsourcesvc.pojo.login.LoginResponse;
 import com.lifebank.source.lbsourcesvc.repository.IClienteRepository;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,10 @@ import java.util.Map;
 public class LoginProcess extends SourceProcess {
     private Logger log;
 
+    public LoginProcess() {
+        this.log = LoggerFactory.getLogger(getClass());
+
+    }
 
     public ResponseEntity<?> authenticationProcess(String user, String pass) {
         Status status = new Status();

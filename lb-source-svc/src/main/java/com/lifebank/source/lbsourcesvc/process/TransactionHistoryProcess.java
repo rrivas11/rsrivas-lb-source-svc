@@ -9,6 +9,7 @@ import com.lifebank.source.lbsourcesvc.pojo.database.Transaccion;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.GetTransactionRequest;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.GetTransactionResponse;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,12 @@ import java.util.List;
 public class TransactionHistoryProcess extends SourceProcess {
     private Logger log;
 
+    public TransactionHistoryProcess() {
+        this.log = LoggerFactory.getLogger(getClass());
 
-    public ResponseEntity<?> process(String id_cuenta, String start, String end,String token){
+    }
+
+    public ResponseEntity<?> process(String id_cuenta, String start, String end, String token){
         Status status = new Status();
         ServiceMessage serviceMessage;
         TransactionParser parser = new TransactionParser(env);
@@ -80,6 +85,7 @@ public class TransactionHistoryProcess extends SourceProcess {
             response = parser.parser(prd,transaccionList,req);
             status.setCode(env.getProperty("appProperties.code.c200"));
             serviceMessage = new ServiceMessage(status, response);
+            log.info("getTransactions response:" + mapper.writeValueAsString(serviceMessage));
             responseEntity = new ResponseEntity <> (serviceMessage, HttpStatus.OK);
 
             return responseEntity;

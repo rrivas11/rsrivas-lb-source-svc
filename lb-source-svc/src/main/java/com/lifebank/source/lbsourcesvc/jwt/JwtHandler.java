@@ -50,17 +50,21 @@ public class JwtHandler {
         -1 Si el JWT ya Expiro
         -2 si la IP no coincide
         -3 si hubo un problema al obtener la IP
+        -4 Si el token va null
 
         Si devuelve mayor a 0 , el JWT es valido.
     */
 
     public int validate(String tkn){
 
-        tkn = tkn.substring(7);
+        if(tkn.isEmpty() || tkn == null){
+            log.error("Operacion requiere authorization token");
+            return -4;
+        }
 
+        tkn = tkn.substring(7);
         int id_cliente=0;
         String ip = "";
-
         try {
             mapOut = tokenMethods.readClaims(tkn, env.getProperty("appProperties.jwt.secret"));
         }catch (ExpiredJwtException  e){
@@ -109,6 +113,8 @@ public class JwtHandler {
                 return  HttpStatus.UNAUTHORIZED;
             case -2:
                 return  HttpStatus.FORBIDDEN; // 403
+            case -4:
+                return  HttpStatus.UNAUTHORIZED; // 403
             default:
                 return  HttpStatus.NOT_FOUND;
         }
@@ -122,6 +128,8 @@ public class JwtHandler {
                 return env.getProperty("appProperties.messages.mjs13"); // 440
             case -2:
                 return  env.getProperty("appProperties.messages.mjs14"); // 403
+            case -4:
+                return  env.getProperty("appProperties.messages.msj18"); // 403
             default:
                 return  env.getProperty("appProperties.messages.mjs1");
         }

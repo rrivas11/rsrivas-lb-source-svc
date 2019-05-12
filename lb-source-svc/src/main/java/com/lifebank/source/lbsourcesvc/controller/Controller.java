@@ -31,17 +31,17 @@ public class Controller {
     @Autowired
     private RestClient restClient;
     @Autowired
-    private ProductProcess productProcess;
+    private ProductProcess productProcess = new ProductProcess();
     @Autowired
-    private LoginProcess loginProcess;
+    private LoginProcess loginProcess = new LoginProcess();
     @Autowired
-    private TransactionHistoryProcess tranctionHistoryProcess;
+    private TransactionHistoryProcess tranctionHistoryProcess = new TransactionHistoryProcess();
     @Autowired
-    private TransactionProcess transactionProcess;
+    private TransactionProcess transactionProcess = new TransactionProcess();
     @Autowired
-    private BeneficiarioProcess beneficiarioProcess;
+    private BeneficiarioProcess beneficiarioProcess = new BeneficiarioProcess();
     @Autowired
-    private GenerateErrorResponse generateErrorResponse;
+    private GenerateErrorResponse generateErrorResponse = new GenerateErrorResponse();
 
     private Date date;
     private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -96,8 +96,6 @@ public class Controller {
                 MDC.put("function", "getTransactions");
                 MDC.put("date", dateFormat.format(date));
                 log.info("getTransactions request recibido: accountID: "+ idProd +", start: "+ start +", end: "+ end);
-                //ServiceMessage serviceMessage = tranctionHistoryProcess.process(idProd,start,end,token);
-                //log.info("getTransactions response:" + mapper.writeValueAsString(serviceMessage));
                 return  tranctionHistoryProcess.process(idProd,start,end,token);
             }catch (Exception e){
                 log.error("Hubo un error en getTransactions, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
@@ -109,35 +107,31 @@ public class Controller {
 
     //Endpoint para realizar una transaccion a productos propios del cliente
     @PostMapping("${app-properties.controller.transaction-p}")
-    public Object setTransactionP(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
+    public ResponseEntity<?> setTransactionP(@RequestBody SetTransactionRequest request, @RequestHeader("authorization") String token) {
         try {
             date = new Date();
             MDC.put("function", "setTransactionP");
             MDC.put("date", dateFormat.format(date));
             log.info("setTransactionP request recibido" + mapper.writeValueAsString(request));
-            ServiceMessage serviceMessage = transactionProcess.processP(request, id_cliente);
-            log.info("setTransactionP response:" + mapper.writeValueAsString(serviceMessage));
-            return serviceMessage;
+            return  transactionProcess.processP(request, token);
         } catch (Exception e) {
             log.error("Hubo un error en setTransactionP, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
-            return generateErrorResponse.getGeneralError();
+            return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
         }
     }
 
     //Endpoint para realizar una transaccion a productos de terceros
     @PostMapping("${app-properties.controller.transaction-t}")
-    public Object setTransactionT(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
+    public ResponseEntity<?> setTransactionT(@RequestBody SetTransactionRequest request, @RequestHeader("authorization") String token) {
         try {
             date = new Date();
             MDC.put("function", "setTransactionT");
             MDC.put("date", dateFormat.format(date));
             log.info("setTransactionT request recibido" + mapper.writeValueAsString(request));
-            ServiceMessage serviceMessage = transactionProcess.processT(request, id_cliente);
-            log.info("setTransactionT response:" + mapper.writeValueAsString(serviceMessage));
-            return serviceMessage;
+            return transactionProcess.processT(request, token);
         } catch (Exception e) {
             log.error("Hubo un error en setTransactionT, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
-            return generateErrorResponse.getGeneralError();
+            return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
         }
     }
 
