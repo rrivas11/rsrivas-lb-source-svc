@@ -106,7 +106,7 @@ public class JwtHandler {
             case 0:
                 return HttpStatus.FORBIDDEN; // 403
             case -1:
-                return  HttpStatus.valueOf(440);
+                return  HttpStatus.UNAUTHORIZED;
             case -2:
                 return  HttpStatus.FORBIDDEN; // 403
             default:

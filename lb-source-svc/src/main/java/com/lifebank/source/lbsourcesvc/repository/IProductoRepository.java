@@ -15,5 +15,8 @@ public interface IProductoRepository extends JpaRepository<Producto, Integer> {
     // obtener el monto de esa cuenta.
     Producto findByidproducto(String id_prod);
 
+    // comprobar si la cuenta existe y si le pertenece a cliente
+    Producto findByidproductoAndIdpropietario(String id_prod, int id_cliente);
+
 
 }

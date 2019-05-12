@@ -1,5 +1,6 @@
 package com.lifebank.source.lbsourcesvc.process;
 
+import com.lifebank.source.lbsourcesvc.jwt.JwtHandler;
 import com.lifebank.source.lbsourcesvc.pojo.cliente.AddBeneficiaryRequest;
 import com.lifebank.source.lbsourcesvc.pojo.cliente.UpdateMailRequest;
 import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
@@ -20,10 +21,19 @@ public class BeneficiarioProcess extends SourceProcess {
     private Logger log;
 
 
-    public  ResponseEntity<Object> updateProcess(UpdateMailRequest request, int id_cliente, String beneficiaryID) {
+    public  ResponseEntity<Object> updateProcess(UpdateMailRequest request, String token, String beneficiaryID) {
         Status status = new Status();
         ServiceMessage serviceMessage;
         Favorito favorito;
+        JwtHandler jwtHandler = new JwtHandler(env);
+
+
+        int id_cliente = jwtHandler.validate(token);
+        if(id_cliente <= 0){
+            status.setMessage(jwtHandler.obtainMsj(id_cliente));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
+        }
 
         favorito = favoritoRepository.findByidclienteAndIdbene(id_cliente,Integer.valueOf(beneficiaryID));
         if(favorito == null) {
@@ -45,10 +55,19 @@ public class BeneficiarioProcess extends SourceProcess {
 
     }
 
-    public  ResponseEntity<Object> deleteProcess( int id_cliente, String beneficiaryID) {
+    public  ResponseEntity<Object> deleteProcess( String token, String beneficiaryID) {
         Status status = new Status();
         ServiceMessage serviceMessage;
         Favorito favorito;
+        JwtHandler jwtHandler = new JwtHandler(env);
+
+
+        int id_cliente = jwtHandler.validate(token);
+        if(id_cliente <= 0){
+            status.setMessage(jwtHandler.obtainMsj(id_cliente));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
+        }
 
         favorito = favoritoRepository.findByidclienteAndIdbene(id_cliente,Integer.valueOf(beneficiaryID));
         if(favorito == null) {
@@ -71,10 +90,19 @@ public class BeneficiarioProcess extends SourceProcess {
         }
     }
 
-    public  ResponseEntity<Object> addProcess(AddBeneficiaryRequest request, int id_cliente) {
+    public  ResponseEntity<Object> addProcess(AddBeneficiaryRequest request, String token) {
         Status status = new Status();
         ServiceMessage serviceMessage;
         Favorito favorito;
+
+        JwtHandler jwtHandler = new JwtHandler(env);
+
+        int id_cliente = jwtHandler.validate(token);
+        if(id_cliente <= 0){
+            status.setMessage(jwtHandler.obtainMsj(id_cliente));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
+        }
 
         Producto prd = productoRepository.findByidproducto(request.getCuentaBeneficiario());
         if(prd == null ){

@@ -88,20 +88,20 @@ public class Controller {
 
     //Endpoint para obtener los productos de un cliente
     @GetMapping("${app-properties.controller.transactions}")
-    public Object getTransactions(@PathVariable("accountID") String idProd, @RequestParam(value="start", required = true) String start,
+    public ResponseEntity<?> getTransactions(@PathVariable("accountID") String idProd, @RequestParam(value="start", required = true) String start,
                                   @RequestParam(value="end", required = true) String end,
-                                  @RequestHeader("token") String user) {
+                                  @RequestHeader("authorization") String token) {
             try {
                 date = new Date();
                 MDC.put("function", "getTransactions");
                 MDC.put("date", dateFormat.format(date));
                 log.info("getTransactions request recibido: accountID: "+ idProd +", start: "+ start +", end: "+ end);
-                ServiceMessage serviceMessage = tranctionHistoryProcess.process(idProd,start,end);
-                log.info("getTransactions response:" + mapper.writeValueAsString(serviceMessage));
-                return serviceMessage;
+                //ServiceMessage serviceMessage = tranctionHistoryProcess.process(idProd,start,end,token);
+                //log.info("getTransactions response:" + mapper.writeValueAsString(serviceMessage));
+                return  tranctionHistoryProcess.process(idProd,start,end,token);
             }catch (Exception e){
                 log.error("Hubo un error en getTransactions, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
-                return generateErrorResponse.getGeneralError();
+                return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
             }
 
     }
@@ -146,13 +146,13 @@ public class Controller {
 
     //Endpoint para actualizar el E-mail de un beneficiario agregado en lista de favoritos.
     @PatchMapping("${app-properties.controller.update-mail}")
-    public ResponseEntity<Object> updateMail(@PathVariable("beneficiaryID") String beneficiaryID, @RequestBody UpdateMailRequest request , @RequestHeader("token") int id_cliente) {
+    public ResponseEntity<Object> updateMail(@PathVariable("beneficiaryID") String beneficiaryID, @RequestBody UpdateMailRequest request , @RequestHeader("authorization") String token) {
         try {
             date = new Date();
             MDC.put("function", "updateMail");
             MDC.put("date", dateFormat.format(date));
             log.info("updateMail request recibido" + mapper.writeValueAsString(request));
-            return beneficiarioProcess.updateProcess(request, id_cliente,beneficiaryID);
+            return beneficiarioProcess.updateProcess(request, token,beneficiaryID);
         } catch (Exception e) {
             log.error("Hubo un error en updateMail, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
             return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
@@ -161,13 +161,13 @@ public class Controller {
 
     //Endpoint para eliminar beneficiario.
     @DeleteMapping("${app-properties.controller.delete-beneficiary}")
-    public ResponseEntity<Object> deleteBeneficiary(@PathVariable("beneficiaryID") String beneficiaryID, @RequestHeader("token") int id_cliente) {
+    public ResponseEntity<Object> deleteBeneficiary(@PathVariable("beneficiaryID") String beneficiaryID, @RequestHeader("authorization") String token) {
         try {
             date = new Date();
             MDC.put("function", "deleteBeneficiary");
             MDC.put("date", dateFormat.format(date));
             log.info("deleteBeneficiary beneficiaryID: " + beneficiaryID);
-            return beneficiarioProcess.deleteProcess(id_cliente,beneficiaryID);
+            return beneficiarioProcess.deleteProcess(token,beneficiaryID);
         } catch (Exception e) {
             log.error("Hubo un error en deleteBeneficiary, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
             return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
@@ -176,13 +176,13 @@ public class Controller {
 
     //Endpoint para agrear beneficiario y su cuenta a lista de favoritos
     @PostMapping("${app-properties.controller.add-beneficiary}")
-    public ResponseEntity<Object> addBeneficiary(@RequestBody AddBeneficiaryRequest request, @RequestHeader("token") int id_cliente) {
+    public ResponseEntity<Object> addBeneficiary(@RequestBody AddBeneficiaryRequest request, @RequestHeader("authorization") String token) {
         try {
             date = new Date();
             MDC.put("function", "deleteBeneficiary");
             MDC.put("date", dateFormat.format(date));
             log.info("addBeneficiary request recibido" + mapper.writeValueAsString(request));
-            return beneficiarioProcess.addProcess(request,id_cliente);
+            return beneficiarioProcess.addProcess(request,token);
         } catch (Exception e) {
             log.error("Hubo un error en addBeneficiary, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
             return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);

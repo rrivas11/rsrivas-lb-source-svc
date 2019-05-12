@@ -38,7 +38,9 @@ appProperties:
     mjs12: "JWT Invalido"
     mjs13: "Expiro la sesion."
     mjs14: "Operacion denegada."
-
+    mjs15: "Cuenta Invalida"
+    msj16: "Fecha invalida"
+    msj17: "Rango de meses excede a 3 meses"
   creditCard: "1"
   loan: "2"
   personal: "3"

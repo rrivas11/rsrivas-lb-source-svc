@@ -1,5 +1,0 @@
-server:
-  port: 90
-spring:
-  profiles:
-    active: local
