@@ -112,8 +112,20 @@ public class JwtHandler {
             default:
                 return  HttpStatus.NOT_FOUND;
         }
-
-
     }
+    public String obtainMsj(int i){
+
+        switch (i){
+            case 0:
+                return env.getProperty("appProperties.messages.mjs12"); // 403
+            case -1:
+                return env.getProperty("appProperties.messages.mjs13"); // 440
+            case -2:
+                return  env.getProperty("appProperties.messages.mjs14"); // 403
+            default:
+                return  env.getProperty("appProperties.messages.mjs1");
+        }
+    }
+
 
 }

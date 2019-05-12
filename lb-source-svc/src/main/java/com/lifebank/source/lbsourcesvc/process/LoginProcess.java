@@ -28,7 +28,7 @@ public class LoginProcess extends SourceProcess {
         ServiceMessage serviceMessage;
         LoginResponse loginResponse = new LoginResponse();
         JwtHandler jwtHandler = new JwtHandler(env);
-        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        HttpStatus httpStatus;
 
         String cadBase64 = (EncryptHandler.cifrarBase64(user) + EncryptHandler.cifrarBase64(pass));
         pass = EncryptHandler.getStringMessageDigest(cadBase64, EncryptHandler.SHA512);

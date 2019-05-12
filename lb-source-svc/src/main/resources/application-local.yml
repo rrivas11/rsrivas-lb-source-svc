@@ -35,9 +35,13 @@ appProperties:
     mjs9: "Saldo insuficiente"
     mjs10: "Contacto no asociado."
     mjs11: "Contacto ya está asociado."
+    mjs12: "JWT Invalido"
+    mjs13: "Expiro la sesion."
+    mjs14: "Operacion denegada."
+
   creditCard: "1"
   loan: "2"
   personal: "3"
   jwt:
     secret: helloWorld
-    expiration-time: 60000
+    expiration-time: 1800000

@@ -72,18 +72,16 @@ public class Controller {
 
     //Endpoint para obtener los productos de un cliente
     @GetMapping("${app-properties.controller.products}")
-    public Object getProducts(@PathVariable("user") String user,@RequestHeader("token") String token) {
+    public ResponseEntity<?> getProducts(@RequestHeader("authorization") String token) {
         try {
             date = new Date();
             MDC.put("function", "getProducts");
             MDC.put("date", dateFormat.format(date));
-            log.info("getProducts request recibido: user:"+ user );
-            ServiceMessage serviceMessage = productProcess.process(user);
-            log.info("getProducts response:" + mapper.writeValueAsString(serviceMessage));
-            return serviceMessage;
+
+            return productProcess.process(token);
         }catch (Exception e){
             log.error("Hubo un error en getProducts, en la línea {} en el método {}, detalle del error {}",e.getStackTrace()[0].getLineNumber(),e.getStackTrace()[0].getMethodName(),e);
-            return generateErrorResponse.getGeneralError();
+            return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
         }
 
     }
