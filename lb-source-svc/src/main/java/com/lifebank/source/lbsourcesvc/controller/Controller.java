@@ -90,11 +90,10 @@ public class Controller {
     }
 
     //Endpoint para obtener los productos de un cliente
-        @GetMapping("${app-properties.controller.transactions}")
-        public Object getTransactions(@PathVariable("accountID") String idProd,
-                @RequestParam(value="start", required = true) String start,
-                @RequestParam(value="end", required = true) String end,
-                @RequestHeader("token") String user) {
+    @GetMapping("${app-properties.controller.transactions}")
+    public Object getTransactions(@PathVariable("accountID") String idProd, @RequestParam(value="start", required = true) String start,
+                                  @RequestParam(value="end", required = true) String end,
+                                  @RequestHeader("token") String user) {
             try {
                 date = new Date();
                 MDC.put("function", "getTransactions");
@@ -110,8 +109,7 @@ public class Controller {
 
     }
 
-
-
+    
     //Endpoint para realizar una transaccion a productos propios del cliente
     @PostMapping("${app-properties.controller.transaction-p}")
     public Object setTransactionP(@RequestBody SetTransactionRequest request, @RequestHeader("token") int id_cliente) {
@@ -160,6 +158,7 @@ public class Controller {
             return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
         }
     }
+
     //Endpoint para eliminar beneficiario.
     @DeleteMapping("${app-properties.controller.delete-beneficiary}")
     public ResponseEntity<Object> deleteBeneficiary(@PathVariable("beneficiaryID") String beneficiaryID, @RequestHeader("token") int id_cliente) {
@@ -175,7 +174,7 @@ public class Controller {
         }
     }
 
-    //Endpoint para eliminar beneficiario.
+    //Endpoint para agrear beneficiario y su cuenta a lista de favoritos
     @PostMapping("${app-properties.controller.add-beneficiary}")
     public ResponseEntity<Object> addBeneficiary(@RequestBody AddBeneficiaryRequest request, @RequestHeader("token") int id_cliente) {
         try {
