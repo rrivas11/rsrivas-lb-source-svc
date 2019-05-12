@@ -5,24 +5,13 @@ import com.lifebank.source.lbsourcesvc.parse.ProductParser;
 import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
 import com.lifebank.source.lbsourcesvc.pojo.common.Status;
 import com.lifebank.source.lbsourcesvc.pojo.database.Cliente;
-import com.lifebank.source.lbsourcesvc.pojo.database.Favorito;
 import com.lifebank.source.lbsourcesvc.pojo.database.Producto;
-import com.lifebank.source.lbsourcesvc.pojo.database.Transaccion;
 import com.lifebank.source.lbsourcesvc.pojo.products.GetProductResponse;
-import com.lifebank.source.lbsourcesvc.repository.IClienteRepository;
-import com.lifebank.source.lbsourcesvc.repository.IFavoritoRepository;
-import com.lifebank.source.lbsourcesvc.repository.IProductoRepository;
-import com.lifebank.source.lbsourcesvc.repository.ITransaccionRepository;
-import com.lifebank.source.lbsourcesvc.utility.RestClient;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

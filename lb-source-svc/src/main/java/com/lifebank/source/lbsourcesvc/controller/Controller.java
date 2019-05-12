@@ -3,11 +3,9 @@ package com.lifebank.source.lbsourcesvc.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lifebank.source.lbsourcesvc.pojo.cliente.AddBeneficiaryRequest;
 import com.lifebank.source.lbsourcesvc.pojo.cliente.UpdateMailRequest;
-import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
 import com.lifebank.source.lbsourcesvc.pojo.login.LoginRequest;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.SetTransactionRequest;
 import com.lifebank.source.lbsourcesvc.process.*;
-import com.lifebank.source.lbsourcesvc.utility.RestClient;
 import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +26,6 @@ import java.util.Date;
 public class Controller {
     @Autowired
     private Environment env;
-    @Autowired
-    private RestClient restClient;
     @Autowired
     private ProductProcess productProcess = new ProductProcess();
     @Autowired
