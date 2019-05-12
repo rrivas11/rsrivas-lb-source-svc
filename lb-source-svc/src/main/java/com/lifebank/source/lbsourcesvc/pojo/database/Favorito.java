@@ -21,6 +21,8 @@ public class Favorito {
     private LocalDateTime fecha;
     @Column(name = "fav_correo")
     private String correo;
+    @Column(name = "fav_nombre")
+    private String nombre;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fav_idcliente", referencedColumnName ="cl_idcliente", nullable = false, insertable = false, updatable = false )
@@ -105,5 +107,13 @@ public class Favorito {
 
     public void setProductoBen(Producto productoBen) {
         this.productoBen = productoBen;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

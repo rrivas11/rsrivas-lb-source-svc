@@ -1,5 +1,6 @@
 package com.lifebank.source.lbsourcesvc.process;
 
+import com.lifebank.source.lbsourcesvc.pojo.cliente.AddBeneficiaryRequest;
 import com.lifebank.source.lbsourcesvc.pojo.cliente.UpdateMailRequest;
 import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
 import com.lifebank.source.lbsourcesvc.pojo.common.Status;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class BeneficiarioProcess extends SourceProcess {
@@ -38,7 +41,7 @@ public class BeneficiarioProcess extends SourceProcess {
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 
     }
 
@@ -58,7 +61,7 @@ public class BeneficiarioProcess extends SourceProcess {
 
         try {
             favoritoRepository.delete(favorito);
-            return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 
         }catch (Exception e){
             status.setCode(env.getProperty("appProperties.code.c404"));
@@ -67,5 +70,57 @@ public class BeneficiarioProcess extends SourceProcess {
             return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
         }
     }
+
+    public  ResponseEntity<Object> addProcess(AddBeneficiaryRequest request, int id_cliente) {
+        Status status = new Status();
+        ServiceMessage serviceMessage;
+        Favorito favorito;
+
+        Producto prd = productoRepository.findByidproducto(request.getCuentaBeneficiario());
+        if(prd == null ){
+            status.setCode(env.getProperty("appProperties.code.c404"));
+            status.setMessage(env.getProperty("appProperties.messages.mjs4"));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
+        }
+
+        if ((prd.getTipoProducto().getIdTipo() != request.getTipoDeLaCuenta()) ){
+            status.setCode(env.getProperty("appProperties.code.c404"));
+            status.setMessage(env.getProperty("appProperties.messages.mjs8"));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
+        }
+
+
+        favorito = favoritoRepository.findByidclienteAndIdbene(id_cliente,prd.getIdpropietario());
+        if(favorito != null) {
+            status.setCode(env.getProperty("appProperties.code.c409"));
+            status.setMessage(env.getProperty("appProperties.messages.mjs11"));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, HttpStatus.CONFLICT);
+            //return serviceMessage;
+        }
+        favorito = new Favorito();
+        favorito.setIdcliente(id_cliente);
+        favorito.setIdbene(prd.getIdpropietario());
+        favorito.setIdprod(prd.getIdproducto());
+        favorito.setFecha(LocalDateTime.now());
+        favorito.setNombre(request.getNombreBeneficiario());
+        favorito.setCorreo(request.getCorreoElectronico());
+
+        Favorito f;
+
+       f = favoritoRepository.save(favorito);
+
+        if(f == null ){
+            status.setCode(env.getProperty("appProperties.code.c404"));
+            status.setMessage(env.getProperty("appProperties.messages.mjs1"));
+            serviceMessage = new ServiceMessage(status, null);
+            return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
+
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.lifebank.source.lbsourcesvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lifebank.source.lbsourcesvc.pojo.cliente.AddBeneficiaryRequest;
 import com.lifebank.source.lbsourcesvc.pojo.cliente.UpdateMailRequest;
 import com.lifebank.source.lbsourcesvc.pojo.common.ServiceMessage;
 import com.lifebank.source.lbsourcesvc.pojo.login.LoginRequest;
@@ -170,6 +171,21 @@ public class Controller {
             return beneficiarioProcess.deleteProcess(id_cliente,beneficiaryID);
         } catch (Exception e) {
             log.error("Hubo un error en deleteBeneficiary, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
+            return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //Endpoint para eliminar beneficiario.
+    @PostMapping("${app-properties.controller.add-beneficiary}")
+    public ResponseEntity<Object> addBeneficiary(@RequestBody AddBeneficiaryRequest request, @RequestHeader("token") int id_cliente) {
+        try {
+            date = new Date();
+            MDC.put("function", "deleteBeneficiary");
+            MDC.put("date", dateFormat.format(date));
+            log.info("addBeneficiary request recibido" + mapper.writeValueAsString(request));
+            return beneficiarioProcess.addProcess(request,id_cliente);
+        } catch (Exception e) {
+            log.error("Hubo un error en addBeneficiary, en la línea {} en el método {}, detalle del error {}", e.getStackTrace()[0].getLineNumber(), e.getStackTrace()[0].getMethodName(), e);
             return new ResponseEntity<>(generateErrorResponse.getGeneralError(),HttpStatus.BAD_REQUEST);
         }
     }

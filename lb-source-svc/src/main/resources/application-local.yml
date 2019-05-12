@@ -22,6 +22,7 @@ appProperties:
     c401: "401"
     c400: "400"
     c404: "404"
+    c409: "409"
   messages:
     mjs1: "Se produjo un error"
     mjs2: "Usuario y/o contraseña invalida"
@@ -33,6 +34,7 @@ appProperties:
     mjs8: "Tipo de cuenta invalida"
     mjs9: "Saldo insuficiente"
     mjs10: "Contacto no asociado."
+    mjs11: "Contacto ya está asociado."
   creditCard: "1"
   loan: "2"
   personal: "3"
