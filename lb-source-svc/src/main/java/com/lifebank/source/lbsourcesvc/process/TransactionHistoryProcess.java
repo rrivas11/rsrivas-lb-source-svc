@@ -8,6 +8,7 @@ import com.lifebank.source.lbsourcesvc.pojo.database.Producto;
 import com.lifebank.source.lbsourcesvc.pojo.database.Transaccion;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.GetTransactionRequest;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.GetTransactionResponse;
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,8 @@ public class TransactionHistoryProcess extends SourceProcess {
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
         }
+        MDC.put("cliente", id_cliente);
+
         //Validaciones de fecha Inicio no sea mayor a la fecha final
         if(startDT.isAfter(endDT)){
             status.setCode(env.getProperty("appProperties.code.c400"));

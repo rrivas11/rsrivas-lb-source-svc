@@ -11,7 +11,7 @@
   </appender>
   <appender name="mainAppender" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%X{date}-%d{HH:mm:ss.SSS}-%X{function} [%thread] %-5level %logger{36}- Code:%X{code} Message:%X{messages} %m%n</pattern>
+      <pattern>%X{date}-%d{HH:mm:ss.SSS}-%X{function} - Cliente: [%X{cliente}] [%thread] %-5level %logger{36}- Code:%X{code} Message:%X{messages} %m%n</pattern>
     </encoder>
   </appender>
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">

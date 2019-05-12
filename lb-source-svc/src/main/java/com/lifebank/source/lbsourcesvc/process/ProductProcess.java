@@ -7,6 +7,7 @@ import com.lifebank.source.lbsourcesvc.pojo.common.Status;
 import com.lifebank.source.lbsourcesvc.pojo.database.Cliente;
 import com.lifebank.source.lbsourcesvc.pojo.database.Producto;
 import com.lifebank.source.lbsourcesvc.pojo.products.GetProductResponse;
+import org.jboss.logging.MDC;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,8 @@ public class ProductProcess extends SourceProcess {
                 serviceMessage = new ServiceMessage(status, null);
                 return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
             }
+            MDC.put("cliente", id_cliente);
+
 
             Cliente c = clienteRepository.findByidcli(id_cliente);
 

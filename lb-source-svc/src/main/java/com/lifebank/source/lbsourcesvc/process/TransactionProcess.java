@@ -8,6 +8,7 @@ import com.lifebank.source.lbsourcesvc.pojo.database.Producto;
 import com.lifebank.source.lbsourcesvc.pojo.database.Transaccion;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.SetTransactionRequest;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.SetTransactionResponse;
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,15 +36,13 @@ public class TransactionProcess extends SourceProcess {
         JwtHandler jwtHandler = new JwtHandler(env);
         ResponseEntity responseEntity;
 
-
-
-
         int id_cliente = jwtHandler.validate(token);
         if(id_cliente <= 0){
             status.setMessage(jwtHandler.obtainMsj(id_cliente));
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
         }
+        MDC.put("cliente", id_cliente);
 
 
         // Validar si se repite el numero de cuenta del origin con el del del destino
@@ -93,6 +92,7 @@ public class TransactionProcess extends SourceProcess {
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
         }
+        MDC.put("cliente", id_cliente);
 
         // validar numero de beneficiario este asoaciado al cliente y cual es la cuenta asociada.
 

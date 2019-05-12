@@ -20,6 +20,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/*  Autor: Ricardo Salvador Rivas Franco
+    Descripcion: Servicios de LifeBank
+    Funciones: - Gestionar lista de beneficiarios (Favoritos)
+               - Realizar transferencias a productos propidos ( Prestamos, Cuentas de ahorro, Tarjetas de credito)
+               - Realizar transferencias a productos de Terceros ( Prestamos, Cuentas de ahorro, Tarjetas de credito)
+               - Generacion de Token de validacion al iniciar sesion.
+*/
+
 @RestController
 @PropertySource("classpath:application.properties")
 @RequestMapping("${service.url.lifebank}")

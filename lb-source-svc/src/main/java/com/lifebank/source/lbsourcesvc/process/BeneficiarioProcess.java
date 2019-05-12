@@ -9,6 +9,8 @@ import com.lifebank.source.lbsourcesvc.pojo.database.Favorito;
 import com.lifebank.source.lbsourcesvc.pojo.database.Producto;
 import com.lifebank.source.lbsourcesvc.pojo.database.Transaccion;
 import com.lifebank.source.lbsourcesvc.pojo.transaction.SetTransactionResponse;
+import com.lifebank.source.lbsourcesvc.utility.MDCHandler;
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -62,6 +64,8 @@ public class BeneficiarioProcess extends SourceProcess {
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
         }
+        MDC.put("cliente", id_cliente);
+
 
         favorito = favoritoRepository.findByidclienteAndIdbene(id_cliente,Integer.valueOf(beneficiaryID));
         if(favorito == null) {
@@ -80,6 +84,8 @@ public class BeneficiarioProcess extends SourceProcess {
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, HttpStatus.NOT_FOUND);
         }
+
+        log.info("Correo electronico del beneficiario se actualizo correctamente: "+ request.getNuevoCorreo());
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 
     }
@@ -96,6 +102,8 @@ public class BeneficiarioProcess extends SourceProcess {
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
         }
+        MDC.put("cliente", id_cliente);
+
 
         favorito = favoritoRepository.findByidclienteAndIdbene(id_cliente,Integer.valueOf(beneficiaryID));
         if(favorito == null) {
@@ -108,6 +116,7 @@ public class BeneficiarioProcess extends SourceProcess {
 
         try {
             favoritoRepository.delete(favorito);
+            log.info("Beneficiario eliminado"+ favorito.getIdbene());
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 
         }catch (Exception e){
@@ -154,6 +163,7 @@ public class BeneficiarioProcess extends SourceProcess {
             serviceMessage = new ServiceMessage(status, null);
             return new ResponseEntity<>(serviceMessage, jwtHandler.obtainHttpCode(id_cliente));
         }
+        MDC.put("cliente", id_cliente);
 
         Producto prd = productoRepository.findByidproducto(request.getCuentaBeneficiario());
         if(prd == null ){
@@ -196,6 +206,7 @@ public class BeneficiarioProcess extends SourceProcess {
         Favorito f;
 
        f = favoritoRepository.save(favorito);
+       log.info("beneficiario agregado correctamente"+ f.getIdbene());
 
         if(f == null ){
             status.setCode(env.getProperty("appProperties.code.c404"));
