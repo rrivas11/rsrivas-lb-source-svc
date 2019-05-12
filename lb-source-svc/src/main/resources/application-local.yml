@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/lm?currentSchema=lm_lifebank
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=lm_lifebank
     username: postgres
     password: Bengine
   jpa:

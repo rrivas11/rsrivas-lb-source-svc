@@ -8,6 +8,7 @@ import com.lifebank.source.lbsourcesvc.pojo.common.Status;
 import com.lifebank.source.lbsourcesvc.pojo.database.Cliente;
 import com.lifebank.source.lbsourcesvc.pojo.login.LoginResponse;
 import com.lifebank.source.lbsourcesvc.repository.IClienteRepository;
+import org.jboss.logging.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,12 @@ public class LoginProcess extends SourceProcess {
             if(c != null) {
 
                 status.setCode(env.getProperty("appProperties.code.c200"));
+                MDC.put("cliente", c.getIdcli());
                 loginResponse.setTkn(jwtHandler.generateJWT(c));
                 httpStatus = HttpStatus.OK;
                 serviceMessage = new ServiceMessage(status, loginResponse);
+                log.info("Login  response: " + mapper.writeValueAsString(serviceMessage));
+
             }else{
                 status.setCode(env.getProperty("appProperties.code.c401"));
                 status.setMessage(env.getProperty("appProperties.messages.mjs2"));
