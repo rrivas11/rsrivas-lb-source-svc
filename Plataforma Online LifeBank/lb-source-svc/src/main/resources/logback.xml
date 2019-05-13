@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+ <springProperty name="active_profile" source="spring.profiles.active" />
+  <timestamp key="bySecond" datePattern="yyyyMMdd"/>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- encoders are assigned the type
+         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %m%n</pattern>
+    </encoder>
+  </appender>
+  <appender name="mainAppender" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%X{date}-%d{HH:mm:ss.SSS}-%X{function} - Cliente: [%X{cliente}] [%thread] %-5level %logger{36}- Code:%X{code} Message:%X{messages} %m%n</pattern>
+    </encoder>
+  </appender>
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>file-log/${active_profile}/lb-source-svc/log.txt</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>file-log/${active_profile}/lb-source-svc/log%d{yyyyMMdd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %X{requestId} [%thread] %-5level %logger{36} trackingToken: %X{trackingToken} - %m%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.lifebank" additivity="false">
+  	<appender-ref ref="mainAppender"/>
+  	<appender-ref ref="fileAppender"/> 
+  </logger>
+  <root level="info">
+    <appender-ref ref="STDOUT"/>    
+    <appender-ref ref="fileAppender"/>
+  </root>
+</configuration>
